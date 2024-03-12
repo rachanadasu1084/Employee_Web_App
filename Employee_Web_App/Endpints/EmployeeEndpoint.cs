@@ -2,8 +2,6 @@
 using Employee_Web_App.Models;
 using Employee_Web_App.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Employee_Web_App.Services;
 
 namespace Employee_Web_App.Endpoints
 {
