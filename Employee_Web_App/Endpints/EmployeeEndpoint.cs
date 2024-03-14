@@ -7,44 +7,34 @@ namespace Employee_Web_App.Endpoints
 {
     public static class EmployeeEndpoints
     {
-        public static void MapEmployeeEndpoints(this WebApplication app)
+        public static WebApplication MapEmployeeEndpoints(this WebApplication app)
         {
-            object value = app.MapGet("/employee", async (HttpContext context, IEmployeeService employeeService) =>
+            app.MapGet("/empData", async (IEmployeeService employeeService) =>
             {
-                return await employeeService.GetAllEmployeesAsync();
+                var response = await employeeService.GetAllEmployeesAsync();
+                return Results.Ok();
             });
 
-            /*app.MapGet("/employee/{id}", async (HttpContext context, IEmployeeService employeeService, int id) =>
+            app.MapPost("/empData/create", async (IEmployeeService employeeService, [FromBody] Employee request) =>
             {
-                var employee = await employeeService.GetEmployeeByIdAsync(id);
-                if (employee == null)
-                    return new NotFoundObjectResult("Sorry, employee doesn't exist.");
-                return new OkObjectResult(employee);
-            });*/
-
-            app.MapPost("/employee/add", async (HttpContext context, IEmployeeService employeeService) =>
-            {
-                var employee = await context.Request.ReadFromJsonAsync<Employee>();
-                var addedEmployee = await employeeService.AddEmployeeAsync(employee);
-                return new CreatedResult(location: $"/employee/{addedEmployee.Id}", addedEmployee);
+                var response = await employeeService.AddEmployeeAsync(request);
+                return Results.Ok();
             });
 
-            /*app.MapPut("/employee/{id}", async (HttpContext context, IEmployeeService employeeService, int id) =>
+            app.MapPut("/empData/update", async (IEmployeeService employeeService, [FromBody] Employee request) =>
             {
-                var updatedEmployee = await context.Request.ReadFromJsonAsync<Employee>();
-                var result = await employeeService.UpdateEmployeeAsync(id, updatedEmployee);
-                if (result == null)
-                    return new NotFoundObjectResult("Sorry, employee doesn't exist.");
-                return new OkObjectResult(result);
+                
+                var response = await employeeService.UpdateEmployeeAsync(request.Id, request);
+                return Results.Ok();
             });
 
-            app.MapDelete("/employee/{id}", async (HttpContext context, IEmployeeService employeeService, int id) =>
+            app.MapDelete("/empData/delete/{id}", async (IEmployeeService employeeService, [FromRoute] int id) =>
             {
-                var deletedEmployee = await employeeService.DeleteEmployeeAsync(id);
-                if (deletedEmployee == null)
-                    return new NotFoundObjectResult("Sorry, employee doesn't exist.");
-                return new OkObjectResult(deletedEmployee);
-            });*/
+                var response = await employeeService.DeleteEmployeeAsync(id);
+                return Results.Ok();
+            });
+
+            return app;
         }
     }
 }

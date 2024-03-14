@@ -1,6 +1,4 @@
 ﻿using Employee_Web_App.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Employee_Web_App.Repository
 {
